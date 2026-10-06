@@ -1,185 +1,186 @@
-# TravelTally · 我的旅行足迹
+# TravelMap
 
-> 一个私人的、视觉精美的、开源的旅行足迹地图。
-> Light up every city you've been — privately, beautifully, yours forever.
+> A private, beautiful, open-source personal travel map.
+> Type a sentence about a trip you took; it lands on the map.
 
-![MIT License](https://img.shields.io/badge/license-MIT-green)
-![Vite + React 19](https://img.shields.io/badge/stack-Vite%20%2B%20React%2019-blue)
-![Private](https://img.shields.io/badge/privacy-100%25%20local-orange)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![Vite](https://img.shields.io/badge/vite-7-646CFF.svg)](https://vitejs.dev)
+[![React](https://img.shields.io/badge/react-19-61DAFB.svg)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/typescript-5.8-3178C6.svg)](https://www.typescriptlang.org)
+[![React-Leaflet](https://img.shields.io/badge/react--leaflet-5-199900.svg)](https://react-leaflet.js.org)
+
+[中文文档](./README.zh-CN.md)
 
 ---
 
-## ✨ 特性
+## Why
 
-- ⚡ **30 秒点亮整张地图** — 首次打开是一张 34 格的省份网格，点几下地图立刻亮起来，不用一条条录入
-- 🖌️ **区域刷亮（涂鸦式）** — 去过一个地方就把它**整个行政区域**刷亮，不是一个孤零零的点。中国支持 **省 → 市 → 县** 三级下钻，国外城市同样会自动铺满边界
-- 🏅 **成就与进度** — 13 个徽章：四大直辖市、沿海走廊、五大自治区、国土 10%、跨越赤道… 解锁时即时提示
-- 🔗 **只读分享链接** — 生成一条链接把地图给别人看，或对比两个人的重合度。链接里只有「去过哪」，笔记照片不出本机
-- 🎯 **挑战** — 打开朋友的链接，收下「TA 去过你没去过的 N 个地方」，地图上以虚线标出待点亮，全部点亮即完成。不用服务器，也不用加好友
-- 🌍 **全世界都能刷** — 中国用官方行政区划（DataV），其他国家先查打包好的离线静态 OSM 边界（`public/osm-boundaries.json`，覆盖 90+ 高频城市），缺失时再回退到 Nominatim，全部自动简化后存本机
-- 🤖 **AI 原生输入** — 右下角输入「成都，去年春天」或「Amsterdam」即可自动解析城市、日期、出行类型
-- 📝 **笔记 & 照片** — 每个地点都可以写笔记、上传照片 — 全部存于本机 IndexedDB
-- 🔒 **完全私人** — 零账号、零注册、零云端。打开网页即用
-- 📦 **数据可携带** — 一键导出 JSON 备份，换设备 / 换浏览器无缝迁移
-- 🌐 **开源 (MIT)** — 你可以审计、修改、自部署
+Most travel-map apps ask for your email, sync to a cloud, and paywall the
+good stuff. TravelMap opens in your browser, stores everything in IndexedDB,
+and never asks you to log in. You write a sentence about a trip; the city
+lights up on the map. That's it.
 
-## 🖌️ 区域刷亮怎么用
+<p align="center">
+  <img src="./docs/img/01-world-overview.png" width="900" alt="World overview — Chengdu, Tokyo, Paris, Sydney, New York lit"/>
+</p>
 
-**中国视图** —— 每个行政区域都是可以「刷」的色块：
+## Demo
 
-| 操作 | 效果 |
-| --- | --- |
-| **单击**区域 | 点亮它 —— 整个市/县的轮廓被填充，像涂鸦一样 |
-| **单击**已点亮的区域 | 打开右侧详情，补充日期、笔记、照片，或删除（取消点亮） |
-| **双击**区域 | 下钻一级（全国 → 省 → 市 → 区县） |
-| **点击面包屑** | 回到任意上级 |
+- Type `成都，去年春天` → Chengdu lights up with a date and a region fill.
+- Type `京都` or `Kyoto` → the same city, your preferred script.
+- Type `Reykjavik` → it's already in the curated set; works offline.
+- Click any pin → the map flies to the city's real administrative outline.
 
-区域填充有三种状态，一眼区分「去过」和「只是下面有去过的地方」：
+<p align="center">
+  <img src="./docs/img/02-click-chengdu.png" width="900" alt="Chengdu selected — its real boundary fills the view, drawer opens on the right"/>
+</p>
 
-- **实心亮色** — 你直接记录了这个区域
-- **中等亮度** — 这个区域下面有点亮的子区域（比如省内点亮了某个市）
-- **淡虚线填充** — 你点亮了它的上级、但没细分到这里（比如点亮了整个市，里面的区县）
+## Highlights
 
-**世界视图** —— 用右下角输入框写下去过的城市（如 `Amsterdam`、`Kyoto`），后台先在打包好的离线 OSM 边界（`public/osm-boundaries.json`，含 Tokyo / Sydney / Paris / Moscow 等 90+ 高频城市）中查，命中就直接画上。命中不到的城市走 Nominatim，按 1 req/秒限速，第一次会看到「正在获取 N 个城市的边界…」，之后缓存到 IndexedDB，不再联网。
+- **AI-native input** — `"去年去了成都和东京"` parses dates, cities, and trip
+  kind. Multi-language: `京都` and `Kyoto` both work.
+- **Real boundaries, not dots** — every city you add renders its actual
+  administrative outline (Chengdu → 687k px² of real shape). Click on the
+  world map flies to the boundary; click in China view drills province → city
+  → district.
+- **Offline-first** — a 385 KB bundle of 90+ high-traffic city boundaries
+  ships in the repo (`public/osm-boundaries.json`). The most common cities
+  never touch the network. Anything else falls back to Nominatim with a
+  persistent IDB cache.
+- **Private by default** — zero accounts, zero cloud. All data lives in
+  IndexedDB. One-click JSON export/import for moving between devices.
+- **Keyboard-friendly** — Tab to a city pin, Enter to select, click anywhere
+  on the map to deselect.
 
-每座城市在世界视图上是一个**带名字的彩色圆点**（去过两次以上会显示 `×2`），不是一个没有说明的孤点。城市名字一直可见；名字太密挤在一起时会自动隐藏一部分，放大后重新出现。
+## China view
 
-**单击城市**，地图会飞过去并把这座城市的**真实行政边界**框满屏幕 —— 所以你看到的是它的**范围**，不是代表它的那个点。因为城市的轮廓在全球缩放下本来就不足一个像素（成都约占 87×70 像素、北京更小），只有飞进去才看得清真正的形状。
+Drill down from province → city → district. Click an empty province to
+record "I was there"; click a lit one to open the drawer and add notes/photos.
+The map fills smoothly with `tt-fill-in` animations.
 
-两个细节：
+<p align="center">
+  <img src="./docs/img/03-china-view.png" width="900" alt="China view — five provinces lit at different opacities"/>
+</p>
 
-- 边界里如果混着飞地（东京都包含往南 1000 公里的岛屿），取景只会框住**离城市最近的那块多边形**，不会缩到一片空海。
-- 万一某座城市在 OSM 上取不到多边形，会退化成它的上级行政区轮廓或外接圆，并用**虚线**画出来，表示这是个近似范围；再不行才只留一个点，不会丢数据。
+## Light theme
 
-**成就**
+Same data, different palette. The CSS is hand-tuned so labels stay
+legible on both palettes.
 
-13 个徽章由你已有的数据算出来，不需要额外记录：第一步、十城、五十城、省级探索者、四大直辖市、沿海走廊、五大自治区、国土 10%、半壁江山、走遍全国、第一次出国、三大洲、跨越赤道。在设置页可以看到整面徽章墙和进度。
+<p align="center">
+  <img src="./docs/img/04-light-world.png" width="900" alt="Light theme — Chengdu, Tokyo, Sydney lit"/>
+</p>
 
-**分享与「每个人自己的数据」**
+## Architecture
 
-部署成静态站之后，每个访问者本来就有各自独立的数据 —— localStorage 和 IndexedDB 是按浏览器隔离的，不需要账号。
+<p align="center">
+  <img src="./docs/architecture.svg" width="720" alt="Architecture diagram"/>
+</p>
 
-想在朋友面前炫一下时，用**设置 → 分享 → 复制链接**生成一条只读链接：
+The lookup cascade `lookupBoundary(key)` checks, in order: in-memory cache
+(warm from IDB on boot) → static bundle (`./osm-boundaries.json`) → IDB
+persisted entries (across reloads) → live Nominatim (with a 1 req/sec
+serial queue to respect the usage policy) → reverse-geocode the parent
+admin area → fall back to a dashed bbox circle. The whole chain is
+idempotent and never hammers upstream.
 
-- 数据全部压在 URL 片段里（最多 600 个地点也只要约 1500 字符），不经过任何服务器
-- 对方打开看到你的点亮版图 + 统计；如果 TA 自己也有地图，会显示**重合度**
-- **笔记、照片、具体日期和坐标都不会进链接**，只分享「去过哪」
-- 中国的分享内容**默认只到市级**，区县会被自动上卷——「在一个城市只点亮两个区」约等于公布住址
-- 链接一旦发出就收不回，分享前请确认
+## Tech stack
 
-**挑战怎么玩**
+| Layer | Choice | Why |
+|---|---|---|
+| Build | Vite 7 + TypeScript 5.8 | fast HMR, ESM-native |
+| UI | React 19 + Framer Motion | concurrent rendering, declarative transitions |
+| Map | react-leaflet 5 + Leaflet 1.9 | the de-facto standard; works offline once tiles cache |
+| State | Zustand 5 + persist | tiny, no boilerplate, plays well with React 19 |
+| Storage | IndexedDB via `idb` | OSM boundary GeoJSONs are too big for localStorage |
+| Styling | Tailwind CSS 4 | fast, utility-first, good dark mode |
+| Geocoding | Nominatim (`/search` + `/reverse`) | free, ODbL, no API key |
+| Simplification | simplify-js (Douglas–Peucker) | every boundary → ≤ 1600 points |
 
-1. 朋友把他的分享链接发给你，你打开它
-2. 如果你自己也有地图，页面会显示**重合度**和「TA 去过、你没去过的 N 个地方」
-3. 点「收下挑战」——这些地方会以**流动的虚线轮廓**画在你的中国地图上，右上角显示 `好友的挑战 3/12`
-4. 点亮它们（单击区域即可），进度实时增长；全部点亮后提示你生成自己的链接发回去
-
-挑战在你的浏览器里算出来（对方快照 − 你的地图），**完成状态不会自动回传**——没有任何自动上报，这是刻意的：否则别人能靠一条只含一个区的链接来探测你去没去过某地。
-
-**数据来源**
-
-- 中国行政区划：[DataV.GeoAtlas](https://datav.aliyun.com/portal/school/atlas/area_selector)，按需加载并缓存在本机
-- 国外城市边界：OpenStreetMap via [Nominatim](https://nominatim.openstreetmap.org/)（ODbL），Douglas–Peucker 简化到每城 ≤1600 点（7 座城市共约 34KB）
-- 全球城市库：[GeoNames](https://www.geonames.org/)（CC-BY 4.0）
-
-
-
-## 🖼 截图
-
-> 首页 / 世界地图 / 中国视图 / 添加地点 / 详情面板
-
-## 🚀 快速开始
+## Quick start
 
 ```bash
-# 克隆
-git clone https://github.com/yourname/traveltally.git
-cd traveltally
-
-# 安装依赖（推荐 pnpm 或 npm）
+# clone, install, run
+git clone https://github.com/frankfika/travelmap.git
+cd travelmap
 npm install
+npm run dev          # open http://localhost:5173
 
-# 开发模式
-npm run dev
-# 打开 http://localhost:5173
-
-# 生产构建
-npm run build
-npm run preview
+# build a static bundle you can self-host
+npm run build        # → ./dist
+npm run preview      # serve ./dist on http://localhost:4173
 ```
 
-零环境变量，零后端，零数据库。开箱即用。
-
-## 🛠 技术栈
-
-| 类别 | 选型 |
-| --- | --- |
-| 构建 | Vite 7 + TypeScript 5 |
-| 框架 | React 19 |
-| 样式 | Tailwind CSS 4 + 手写 design tokens |
-| 地图 | React Leaflet 5 (OpenStreetMap 瓦片) |
-| 状态 | Zustand + persist middleware |
-| 动效 | Framer Motion |
-| UI 原子 | Radix UI (Dialog / Popover) |
-| 照片存储 | IndexedDB (via `idb`) |
-| 图标 | lucide-react |
-
-## 🏗 项目结构
-
-```
-src/
-├── components/      # 复用 UI
-│   ├── map/         # 地图视图 + 添加地点弹窗
-│   ├── china/       # 中国地图（含 GeoJSON 渲染）
-│   ├── sidebar/     # 详情面板、列表、统计
-│   └── ui/          # Button, Dialog, Input, ...
-├── data/
-│   ├── china.ts     # 中国省市数据
-│   └── cities.ts    # 默认热门城市列表（用于即时搜索）
-├── hooks/
-│   ├── useCitySearch.ts    # 按前缀分片加载城市索引
-│   └── useStore.ts         # Zustand 全局状态
-├── lib/
-│   ├── photoStore.ts       # IndexedDB 照片 CRUD
-│   ├── colors.ts           # 颜色映射
-│   └── utils.ts
-├── pages/
-│   ├── HomePage.tsx        # 首页
-│   ├── WorldPage.tsx       # 世界地图页
-│   ├── ChinaPage.tsx       # 中国地图页
-│   └── SettingsPage.tsx    # 设置 / 导入导出
-└── types.ts
-
-public/
-├── cities/                 # 706 个 JSON 文件，按前缀索引全球城市
-└── china-provinces.json    # 中国省级 GeoJSON（DataV.GeoAtlas）
-```
-
-## 🔐 隐私
-
-- 所有地点、笔记存于浏览器 `localStorage`
-- 照片存于浏览器 `IndexedDB`
-- 没有任何后端、没有任何上传（除地图瓦片由 OpenStreetMap 提供）
-
-清空浏览器数据 = 完全删除你的所有记录。建议定期使用「导出 JSON」备份。
-
-### 🛠️ 更新离线边界包
-
-`public/osm-boundaries.json` 是打包好的离线 OSM 边界，首次安装默认覆盖 90+ 高频城市。要扩展覆盖或重新打包：
+To rebuild the offline OSM boundary bundle (defaults to 90+ cities,
+re-run if Nominatim data improves):
 
 ```bash
-node scripts/build-osm-boundaries.mjs           # 全量打包（~2 分钟，Nominatim 1 req/s）
-node scripts/retry-osm-boundaries.mjs /tmp/missing.json   # 补漏
+node scripts/build-osm-boundaries.mjs            # ~2 min, 1 req/sec
+node scripts/retry-osm-boundaries.mjs /tmp/missing.json   # fill gaps
 ```
 
-城市列表在 `scripts/build-osm-boundaries.mjs` 顶部的 `CITIES` 数组里。生成的 `osm-boundaries.json` 直接被 `lookupBoundary` 在 Nominatim 之前优先命中。
+The city list lives at the top of `scripts/build-osm-boundaries.mjs` —
+add a `{ name, cc, lat, lng }` entry and re-run.
 
-## 📦 致谢 / 数据来源
+## Development
 
-- 全球城市数据：[GeoNames](https://www.geonames.org/) — CC-BY 4.0
-- 国外城市边界：[OpenStreetMap](https://www.openstreetmap.org/) via [Nominatim](https://nominatim.openstreetmap.org/) — ODbL，Douglas–Peucker 简化到每城 ≤1600 点（`public/osm-boundaries.json` ~385 KB 覆盖 90+ 城）
-- 中国省级 GeoJSON：[DataV.GeoAtlas](https://datav.aliyun.com/portal/school/atlas/area_selector) — 公开数据
-- 地图瓦片：[OpenStreetMap](https://www.openstreetmap.org/) contributors — ODbL
+| Command | What it does |
+|---|---|
+| `npm run dev` | Vite dev server on `:5173`, HMR for `src/` |
+| `npm run build` | Type-check + production bundle to `dist/` |
+| `npm run preview` | Serve the production bundle on `:4173` |
+| `node scripts/verify-map.mjs` | 27-assertion e2e suite (requires dev server) |
+| `node scripts/audit-e2e.mjs` | 10-assertion long-form e2e audit |
 
-## 📄 License
+Both test scripts block Nominatim at the network layer — the entire
+suite runs deterministically against the bundled OSM boundaries, so CI
+never flakes on upstream rate-limits. Last green run:
+27 / 27 + 10 / 10 with 0 Nominatim requests.
 
-MIT © TravelTally Contributors
+## Data flow at a glance
+
+```
+  "去年去了成都和东京"
+            │
+            ▼
+  ┌──────────────┐         ┌──────────────────┐
+  │  aiParser    │  ─────► │    ResolvedCity  │  zh name  +  Latin lookupName
+  │  parseTravel │         │   + adcode        │
+  └──────────────┘         │   + lat/lng        │
+            │              └──────────────────┘
+            ▼
+  ┌──────────────────────────┐         ┌─────────────────────────┐
+  │  lookupBoundary(key)     │  ─────► │ public/osm-boundaries   │
+  │  in-mem → bundle → IDB → │         │ .json (385 KB, 90+)    │
+  │  Nominatim → reverse      │         └─────────────────────────┘
+  └──────────────────────────┘
+            │
+            ▼
+       ┌─────────┐
+       │  Place  │   boundaryKey, adcode, lookupName, lat/lng
+       └─────────┘
+```
+
+## Roadmap
+
+- [x] China provinces → cities → districts
+- [x] World cities via Nominatim + offline bundle
+- [x] Persistence in IndexedDB
+- [x] Race-safe outline framing on click
+- [x] 37-assertion e2e suite (verify-map + audit)
+- [ ] Overpass API for ad-hoc cities (replace Nominatim `reverse` step)
+- [ ] iOS / Android via Capacitor
+- [ ] Multi-user share via signed URL (currently single-link sharing only)
+- [ ] Photo upload to IndexedDB blob storage (already scaffolded)
+
+## License
+
+MIT — see [LICENSE](./LICENSE).
+
+## Credits
+
+- City data — [GeoNames](https://www.geonames.org/) (CC-BY 4.0)
+- World boundaries — [OpenStreetMap](https://www.openstreetmap.org/)
+  via [Nominatim](https://nominatim.openstreetmap.org/) (ODbL)
+- China GeoJSON — [DataV.GeoAtlas](https://datav.aliyun.com/portal/school/atlas/area_selector)
+- Map tiles — [OpenStreetMap](https://www.openstreetmap.org/) contributors (ODbL)
