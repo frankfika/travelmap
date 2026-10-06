@@ -1,0 +1,31 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+tsconfig.tsbuildinfo
+
+# vite cache
+.vite/
+
+# editor / OS noise
+.DS_Store
+.idea/
+.vscode/
+
+# puppeteer / chrome temp profiles
+.tt-*-profile/
+/tmp/tt-*
+
+# screenshots from running scripts (regenerated)
+screenshots/
+
+# logs
+*.log
+npm-debug.log*
+
+# env
+.env
+.env.local
+
+# workflow helpers — keep the project clean but allow committed scripts

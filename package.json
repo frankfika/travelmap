@@ -1,0 +1,49 @@
+{
+  "name": "traveltally",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "TravelTally — A private, beautiful, open-source personal travel map. Light up every city you've been.",
+  "author": {
+    "name": "TravelTally Contributors"
+  },
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-popover": "^1.1.15",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@tailwindcss/vite": "^4.1.12",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^12.23.12",
+    "idb": "^8.0.3",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.541.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-leaflet": "^5.0.0-rc.2",
+    "react-router": "^7.8.2",
+    "simplify-js": "^1.2.4",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.12",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@types/geojson": "^7946.0.14",
+    "@types/leaflet": "^1.9.20",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "tw-animate-css": "^1.3.7",
+    "typescript": "~5.8.3",
+    "vite": "^7.1.2"
+  }
+}
